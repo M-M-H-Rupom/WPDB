@@ -41,6 +41,8 @@ function menu_wpdb_callback(){
         <button class="wpdb_button" data-task="single_row"> Load single row </button>
         <button class="wpdb_button" data-task="double_row"> Load multiple row </button>
         <button class="wpdb_button" data-task="multiple_insert"> Add multiple data </button>
+        <button class="wpdb_button" data-task="single_col"> Add single column </button>
+        <button class="wpdb_button" data-task="delete_data"> Delete data </button>
     </div>
    <h2 class='show_first_data'> </h2>
    <h2 class='show_more_data'> </h2>
@@ -88,6 +90,13 @@ add_action( 'wp_ajax_wpdb_action', function(){
                 $wpdb->insert($table_name,$a_persons);
             }
             wp_send_json('add multiple');
+        }elseif('single_col' == $_POST['task']){
+            $col_query = ("SELECT email FROM {$table_name}");
+            $result = $wpdb->get_col($col_query);
+            wp_send_json($result);
+        }elseif('delete_data' == $_POST['task']){
+            $wpdb->delete($table_name,['id'=> 88]);
+            wp_send_json('deleted');
         }
     }
 });

@@ -16,7 +16,7 @@
                     console.log(data);
                     var j_data = JSON.stringify(data);
                     $('.show_first_data').html('<pre>'+ j_data +'</pre>');
-                    $('.show_more_data').html(data.id).show();
+                    $('.show_more_data').html(data.email).show();
                 }
             });
         });
