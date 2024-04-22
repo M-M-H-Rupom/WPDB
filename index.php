@@ -43,10 +43,13 @@ function menu_wpdb_callback(){
         <button class="wpdb_button" data-task="multiple_insert"> Add multiple data </button>
         <button class="wpdb_button" data-task="single_col"> Add single column </button>
         <button class="wpdb_button" data-task="delete_data"> Delete data </button>
+        <button class="wpdb_button" data-task="data_query"> Query data </button>
     </div>
    <h2 class='show_first_data'> </h2>
    <h2 class='show_more_data'> </h2>
-   <h2 class=''> </h2>
+   <div class="query_table">
+    
+   </div>
    <?php
 }
 add_action( 'admin_menu',function(){
@@ -98,6 +101,25 @@ add_action( 'wp_ajax_wpdb_action', function(){
             $wpdb->delete($table_name,['id'=> 88]);
             wp_send_json('deleted');
         }
+        // elseif('data_query' == $_POST['task']){
+            $args = array(
+                'post_type' => 'page',
+            );
+            $query = new WP_Query($args);
+            $page_data = [];
+            while($query->have_posts()){
+                $query->the_post();
+                // the_title();
+                // the_content();
+                $page_data[] = [
+                    'title' => get_the_title(),
+                    'content' => get_the_content()
+                ];
+            }
+            wp_reset_postdata();
+            wp_send_json($page_data);
+            die();
+        // }
     }
 });
 ?>

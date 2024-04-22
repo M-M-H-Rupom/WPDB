@@ -3,3 +3,10 @@
     gap: 32px;
     margin-top: 44px;
 }
+table, td, th {
+    border: 1px solid;
+}
+table {
+    width: 90%;
+    border-collapse: collapse;
+}
