@@ -1,4 +1,5 @@
 // alert('hello');
+// console.log(wpdb_data);
 ;(function($){
     $(document).ready(function(){
         $('.wpdb_button').on('click',function(){
@@ -13,7 +14,9 @@
                 },
                 success: function(data){
                     console.log(data);
-                    $('.show_first_data').html(data);
+                    var j_data = JSON.stringify(data);
+                    $('.show_first_data').html('<pre>'+ j_data +'</pre>');
+                    $('.show_more_data').html(data.id).show();
                 }
             });
         });
