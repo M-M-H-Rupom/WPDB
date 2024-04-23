@@ -50,12 +50,43 @@ function menu_wpdb_callback(){
    <div class="query_table">
     
    </div>
+
+   
    <?php
+}
+function option_wpdb_callback(){
+  ?>
+   <button class="action_option" data-task="add_option"> Add option</button>
+   <button class="action_option" data-task="array_option"> Add array option</button>
+   <button class="action_option" data-task="option_data"> Add option</button>
+   <button class="action_option" data-task="option_data"> Add option</button>
+  <?php
 }
 add_action( 'admin_menu',function(){
     add_menu_page('wpdb_demo', 'Wpdb_demo', 'manage_options', 'wpdbdemo', 'menu_wpdb_callback');
+    add_menu_page('options_demo', 'Options_demo', 'manage_options', 'option_api', 'option_wpdb_callback');
 });
-// 
+// options ajax call 
+function ajax_option_callback(){
+    if(wp_verify_nonce($_POST['f_nonce'], 'wpdb_protected')){
+        if('add_option' == $_POST['f_task']){
+            $key = 'country';
+            $value = 'bangladesh';
+            add_option($key,$value);
+            wp_send_json('option_added');
+        }elseif('array_option' == $_POST['f_task']){
+            $key = 'arr_country';
+            $json_value = json_encode([
+                'country' => 'bangladesh',
+                'capital' => 'dhaka',
+            ]);
+            add_option($key,$json_value);
+            wp_send_json('option_array_added');
+        }
+    }
+    die();
+}
+add_action( 'wp_ajax_options_data', 'ajax_option_callback' );
 
  
 add_action( 'wp_ajax_wpdb_action', function(){
@@ -122,4 +153,7 @@ add_action( 'wp_ajax_wpdb_action', function(){
         // }
     }
 });
+
+// option API
+
 ?>
