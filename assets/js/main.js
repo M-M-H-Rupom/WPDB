@@ -2,7 +2,7 @@
 // console.log(wpdb_data);
 ;(function($){
     $(document).ready(function(){
-         $('.wpdb_button').on('load',function(){
+         $('.wpdb_button').on('click',function(){
             let task = $(this).data('task');
             $.ajax({
                 url: wpdb_data.ajax_url,
@@ -43,8 +43,9 @@
                 success : function(data){
                     console.log(data)
                 },
-                error : function(data){
-                    console.log(data)
+                error : function(){
+                    alert("Something Wrong...");
+                    console.error('failed');
                 }
 
             })

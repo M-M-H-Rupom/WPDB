@@ -58,9 +58,14 @@ function option_wpdb_callback(){
   ?>
    <button class="action_option" data-task="add_option"> Add option</button>
    <button class="action_option" data-task="array_option"> Add array option</button>
-   <button class="action_option" data-task="option_data"> Add option</button>
-   <button class="action_option" data-task="option_data"> Add option</button>
-  <?php
+   <button class="action_option" data-task="get_option"> Get option</button>
+   <button class="action_option" data-task="update_option"> Update option</button>
+   <button class="action_option" data-task="delete_option"> Delete option</button>
+   <button class="action_option" data-task="set_transient"> Set transient </button>
+   <button class="action_option" data-task="get_transient"> Get transient </button>
+   <button class="action_option" data-task="delete_transient"> Delete transient</button>
+
+  <?php 
 }
 add_action( 'admin_menu',function(){
     add_menu_page('wpdb_demo', 'Wpdb_demo', 'manage_options', 'wpdbdemo', 'menu_wpdb_callback');
@@ -72,8 +77,8 @@ function ajax_option_callback(){
         if('add_option' == $_POST['f_task']){
             $key = 'country';
             $value = 'bangladesh';
-            add_option($key,$value);
-            wp_send_json('option_added');
+            $result = add_option($key,$value);
+            wp_send_json('add otion');
         }elseif('array_option' == $_POST['f_task']){
             $key = 'arr_country';
             $json_value = json_encode([
@@ -82,6 +87,28 @@ function ajax_option_callback(){
             ]);
             add_option($key,$json_value);
             wp_send_json('option_array_added');
+        }elseif('get_option' == $_POST['f_task']){
+            $result = get_option('arr_country');
+            wp_send_json($result);
+        }elseif('update_option' == $_POST['f_task']){
+            $value = 'india';
+            update_option('country',$value);
+            wp_send_json('updated');
+        }elseif('delete_option' == $_POST['f_task']){
+            delete_option('country');
+            wp_send_json('deleted_option');
+        }elseif('set_transient' == $_POST['f_task']){
+            $key = 'city';
+            $value = get_option('arr_country');
+            $expiry = 10;
+            $s_transient = set_transient($key, $value,$expiry);
+            wp_send_json($s_transient);
+        }elseif('get_transient' == $_POST['f_task']){
+            $result_transient = get_transient('city');
+            wp_send_json($result_transient);
+        }elseif('delete_transient' == $_POST['f_task']){
+            $delete_transient = delete_transient('city');
+            wp_send_json($delete_transient);
         }
     }
     die();
